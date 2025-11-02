@@ -29,7 +29,8 @@ echo.
 
 REM Executar o launcher Python
 echo 🚀 Iniciando Neural Trading...
-python start_neural_cyberpunk.py
+cd /d "%~dp0"
+python scripts\start_neural_cyberpunk.py
 
 if errorlevel 1 (
     echo.
@@ -41,3 +42,4 @@ if errorlevel 1 (
 echo.
 echo 👋 Obrigado por usar Neural Trading!
 pause
+

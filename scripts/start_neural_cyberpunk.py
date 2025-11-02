@@ -75,8 +75,12 @@ pandas>=1.3.0
 requests>=2.25.0
 """
 
-    if not os.path.exists("requirements.txt"):
-        with open("requirements.txt", "w") as f:
+    # Obter o diretório raiz do projeto (dois níveis acima)
+    project_root = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+    requirements_path = os.path.join(project_root, "requirements.txt")
+    
+    if not os.path.exists(requirements_path):
+        with open(requirements_path, "w") as f:
             f.write(requirements_content)
         print("📄 Arquivo requirements.txt criado!")
 
@@ -110,13 +114,22 @@ def main():
     print("\n🎯 Iniciando interface cyberpunk do NeuralTrading...")
 
     try:
+        # Adicionar diretório src ao sys.path
+        script_dir = os.path.dirname(os.path.abspath(__file__))
+        project_root = os.path.dirname(script_dir)
+        src_path = os.path.join(project_root, "src")
+        
+        if src_path not in sys.path:
+            sys.path.insert(0, src_path)
+        
         # Importar e executar a interface cyberpunk
-        from cyberpunk_neural_terminal import main as cyberpunk_main
+        from neural_trading.cyberpunk_neural_terminal import main as cyberpunk_main
         print("🚀 Carregando NEURAL TRADING AI...")
         cyberpunk_main()
     except ImportError as e:
         print(f"❌ Erro ao importar interface cyberpunk: {e}")
-        print("Verifique se o arquivo cyberpunk_neural_terminal.py existe.")
+        print("Verifique se o pacote neural_trading está corretamente instalado.")
+        print(f"Caminho src: {src_path if 'src_path' in locals() else 'N/A'}")
         input("Pressione ENTER para sair...")
         return 1
     except KeyboardInterrupt:

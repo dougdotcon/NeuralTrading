@@ -9,8 +9,8 @@ import random
 import time
 import numpy as np
 from datetime import datetime, timedelta
-from neural_config import NEURAL_MODELS, POPULAR_ASSETS, get_timestamp
-from real_data_collector import RealDataCollector
+from .neural_config import NEURAL_MODELS, POPULAR_ASSETS, get_timestamp
+from .real_data_collector import RealDataCollector
 
 class NeuralForecaster:
     def __init__(self, model_type='nhits', gpu_enabled=True, use_real_data=True):

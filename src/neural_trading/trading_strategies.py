@@ -9,8 +9,8 @@ import random
 import time
 import numpy as np
 from datetime import datetime, timedelta
-from neural_config import TRADING_STRATEGIES, RISK_SETTINGS, get_timestamp, format_percentage
-from neural_forecaster import NeuralForecaster
+from .neural_config import TRADING_STRATEGIES, RISK_SETTINGS, get_timestamp, format_percentage
+from .neural_forecaster import NeuralForecaster
 
 class TradingStrategy:
     """Classe base para estratégias de trading"""

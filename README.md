@@ -60,17 +60,22 @@ O sistema agora suporta **dados reais** através de APIs gratuitas:
 ### 1. Método Automático (Recomendado)
 ```bash
 # Windows
-start_neural_cyberpunk.bat
+start.bat
+# ou
+scripts\start_neural_cyberpunk.bat
 
 # Linux/Mac
-python start_neural_cyberpunk.py
+python start.py
+# ou
+python scripts/start_neural_cyberpunk.py
 ```
 O script irá verificar e instalar automaticamente todas as dependências necessárias.
 
 ### 2. Método Manual
 ```bash
 pip install -r requirements.txt
-python cyberpunk_neural_terminal.py
+# Adicionar src ao PYTHONPATH e executar
+python -m neural_trading.cyberpunk_neural_terminal
 ```
 
 ### 3. Dependências
@@ -90,10 +95,10 @@ pip install colorama pyfiglet numpy pandas requests
 Execute o launcher:
 ```bash
 # Windows
-start_neural_cyberpunk.bat
+start.bat
 
 # Linux/Mac
-python start_neural_cyberpunk.py
+python start.py
 ```
 
 ### 2. Menu Principal
@@ -219,19 +224,37 @@ python start_neural_cyberpunk.py
 ## 🔧 Arquitetura do Sistema
 
 ```
-neuraltrading/
-├── cyberpunk_neural_terminal.py    # Interface principal
-├── start_neural_cyberpunk.py       # Launcher automático
-├── start_neural_cyberpunk.bat      # Launcher Windows
-├── neural_config.py                # Configurações e constantes
-├── neural_forecaster.py            # Engine de previsão neural
-├── real_data_collector.py          # 🌐 NOVO: Coletor de dados reais
-├── trading_strategies.py           # Estratégias de trading
-├── portfolio_manager.py            # Gerenciador de portfólio
-├── requirements.txt                # Dependências (+ requests)
-├── README.md                       # Documentação
-├── REAL_DATA_DEMO.md               # 🌐 NOVO: Demo com dados reais
-└── REAL_DATA_UPDATE.md             # 🌐 NOVO: Resumo da atualização
+TRADING_neural/
+├── src/
+│   └── neural_trading/             # Pacote principal do sistema
+│       ├── __init__.py             # Inicialização do pacote
+│       ├── cyberpunk_neural_terminal.py    # Interface principal
+│       ├── neural_config.py                # Configurações e constantes
+│       ├── neural_forecaster.py            # Engine de previsão neural
+│       ├── real_data_collector.py          # 🌐 Coletor de dados reais
+│       ├── trading_strategies.py           # Estratégias de trading
+│       └── portfolio_manager.py            # Gerenciador de portfólio
+├── scripts/                        # Scripts de inicialização
+│   ├── start_neural_cyberpunk.py   # Launcher automático Python
+│   └── start_neural_cyberpunk.bat  # Launcher Windows (legado)
+├── docs/                           # Documentação do projeto
+│   ├── DEMO.md
+│   ├── performance.md
+│   ├── PROJECT_SUMMARY.md
+│   ├── README_UPDATE_SUMMARY.md
+│   ├── REAL_DATA_DEMO.md
+│   ├── REAL_DATA_UPDATE.md
+│   └── ...
+├── logs/                           # Logs do sistema
+│   ├── combined.log
+│   ├── error.log
+│   └── interactions.log
+├── tests/                          # Testes (a implementar)
+├── config/                         # Configurações adicionais (futuro)
+├── start.bat                       # Launcher principal Windows
+├── start.py                        # Launcher principal Python
+├── requirements.txt                # Dependências do projeto
+└── README.md                       # Documentação principal
 ```
 
 ## 🎨 Personalização
@@ -276,10 +299,10 @@ Este MVP foi inspirado na documentação completa do **Claude Code Neural Trader
 ### Iniciar Sistema
 ```bash
 # Windows
-start_neural_cyberpunk.bat
+start.bat
 
 # Linux/Mac
-python start_neural_cyberpunk.py
+python start.py
 ```
 
 ### 🌐 Previsão com Dados Reais (exemplo)
@@ -313,8 +336,8 @@ python start_neural_cyberpunk.py
 
 ### 🧪 Testar APIs
 ```bash
-cd neuraltrading
-python -c "from real_data_collector import RealDataCollector; RealDataCollector().test_apis()"
+# Adicionar src ao PYTHONPATH
+python -c "import sys; sys.path.insert(0, 'src'); from neural_trading.real_data_collector import RealDataCollector; RealDataCollector().test_apis()"
 ```
 
 ## 🌐 Dados Reais vs Simulados

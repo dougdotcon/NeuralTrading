@@ -11,7 +11,7 @@ import numpy as np
 import time
 from datetime import datetime, timedelta
 import json
-from neural_config import POPULAR_ASSETS, get_timestamp
+from .neural_config import POPULAR_ASSETS, get_timestamp
 
 class RealDataCollector:
     def __init__(self):

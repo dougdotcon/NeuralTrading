@@ -13,13 +13,14 @@ from datetime import datetime
 import colorama
 from colorama import Fore, Back, Style
 import pyfiglet
-from neural_config import (
+
+from .neural_config import (
     CYBERPUNK_COLORS, CYBERPUNK_SYMBOLS, POPULAR_ASSETS, TRADING_STRATEGIES,
     NEURAL_MODELS, get_timestamp, format_currency, format_percentage
 )
-from neural_forecaster import NeuralForecaster, MultiModelForecaster
-from trading_strategies import StrategyManager
-from portfolio_manager import PortfolioManager
+from .neural_forecaster import NeuralForecaster, MultiModelForecaster
+from .trading_strategies import StrategyManager
+from .portfolio_manager import PortfolioManager
 
 # Inicializar colorama para Windows
 colorama.init()

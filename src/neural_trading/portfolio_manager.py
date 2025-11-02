@@ -9,7 +9,7 @@ import random
 import time
 import numpy as np
 from datetime import datetime, timedelta
-from neural_config import (
+from .neural_config import (
     DEFAULT_PORTFOLIO, RISK_SETTINGS, POPULAR_ASSETS,
     get_timestamp, format_currency, format_percentage
 )
