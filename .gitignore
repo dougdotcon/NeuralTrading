@@ -46,3 +46,9 @@ models/
 results/
 backtest_results/
 
+# Arquivos de configuração sensíveis
+.env
+.env.local
+*.env
+config/api_keys.json
+

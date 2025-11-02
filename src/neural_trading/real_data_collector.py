@@ -5,16 +5,37 @@ Coletor de dados reais de mercado para o sistema NeuralTrading
 Integra APIs gratuitas para ações, crypto e forex
 """
 
+import os
+import sys
 import requests
 import pandas as pd
 import numpy as np
 import time
 from datetime import datetime, timedelta
 import json
+
+# Adicionar pasta config ao path
+config_path = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), 'config')
+if config_path not in sys.path:
+    sys.path.insert(0, config_path)
+
+try:
+    from api_config import get_api_config
+    CONFIG_AVAILABLE = True
+except ImportError:
+    CONFIG_AVAILABLE = False
+
 from .neural_config import POPULAR_ASSETS, get_timestamp
 
 class RealDataCollector:
     def __init__(self):
+        # Carregar configuração centralizada
+        if CONFIG_AVAILABLE:
+            self.config = get_api_config()
+            cache_timeout = self.config.get('system', 'default_cache_timeout', 300)
+        else:
+            cache_timeout = 300
+        
         self.session = requests.Session()
         self.session.headers.update({
             'User-Agent': 'NeuralTrading/1.0 (Educational Purpose)'
@@ -22,22 +43,29 @@ class RealDataCollector:
         
         # Cache para evitar muitas requisições
         self.cache = {}
-        self.cache_timeout = 300  # 5 minutos
+        self.cache_timeout = cache_timeout
         
     def get_stock_data_yahoo(self, symbol, period='1mo'):
         """Coleta dados de ações via Yahoo Finance API gratuita"""
         try:
             print(f"📈 Coletando dados de {symbol} via Yahoo Finance...")
             
-            # Yahoo Finance API gratuita
-            url = f"https://query1.finance.yahoo.com/v8/finance/chart/{symbol}"
+            # Obter configuração de URL e timeout
+            if CONFIG_AVAILABLE:
+                base_url = self.config.get('yahoo_finance', 'base_url', 'https://query1.finance.yahoo.com/v8/finance/chart')
+                timeout = self.config.get('yahoo_finance', 'timeout', 10)
+            else:
+                base_url = 'https://query1.finance.yahoo.com/v8/finance/chart'
+                timeout = 10
+            
+            url = f"{base_url}/{symbol}"
             params = {
                 'range': period,
                 'interval': '1h',
                 'includePrePost': 'false'
             }
             
-            response = self.session.get(url, params=params, timeout=10)
+            response = self.session.get(url, params=params, timeout=timeout)
             response.raise_for_status()
             
             data = response.json()
@@ -79,6 +107,16 @@ class RealDataCollector:
         try:
             print(f"🪙 Coletando dados de {symbol} via CoinGecko...")
             
+            # Obter configuração
+            if CONFIG_AVAILABLE:
+                base_url = self.config.get('coingecko', 'base_url', 'https://api.coingecko.com/api/v3')
+                timeout = self.config.get('coingecko', 'timeout', 10)
+                api_key = self.config.get_api_key('coingecko')
+            else:
+                base_url = 'https://api.coingecko.com/api/v3'
+                timeout = 10
+                api_key = None
+            
             # Mapeia símbolos para IDs do CoinGecko
             crypto_map = {
                 'BTC': 'bitcoin',
@@ -93,14 +131,18 @@ class RealDataCollector:
             
             coin_id = crypto_map.get(symbol, symbol.lower())
             
-            url = f"https://api.coingecko.com/api/v3/coins/{coin_id}/market_chart"
+            url = f"{base_url}/coins/{coin_id}/market_chart"
             params = {
                 'vs_currency': 'usd',
                 'days': days,
                 'interval': 'hourly'
             }
             
-            response = self.session.get(url, params=params, timeout=10)
+            # Adicionar API key se disponível
+            if api_key:
+                params['x_cg_demo_api_key'] = api_key
+            
+            response = self.session.get(url, params=params, timeout=timeout)
             response.raise_for_status()
             
             data = response.json()
@@ -139,11 +181,19 @@ class RealDataCollector:
             # Separa o par (ex: EUR/USD -> EUR, USD)
             base, quote = pair.split('/')
             
+            # Obter configuração
+            if CONFIG_AVAILABLE:
+                base_url = self.config.get('exchangerate', 'base_url', 'https://api.exchangerate-api.com/v4')
+                timeout = self.config.get('exchangerate', 'timeout', 10)
+            else:
+                base_url = 'https://api.exchangerate-api.com/v4'
+                timeout = 10
+            
             # API gratuita tem limitações, vamos simular dados históricos
             # baseados na taxa atual
-            url = f"https://api.exchangerate-api.com/v4/latest/{base}"
+            url = f"{base_url}/latest/{base}"
             
-            response = self.session.get(url, timeout=10)
+            response = self.session.get(url, timeout=timeout)
             response.raise_for_status()
             
             data = response.json()

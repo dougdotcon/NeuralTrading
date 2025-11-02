@@ -14,14 +14,7 @@ O sistema agora suporta **dados reais** através de APIs gratuitas:
 
 **Fallback inteligente**: Se APIs falharem, o sistema automaticamente usa dados simulados.
 
-## ✨ Características
 
-### 🎨 Interface Cyberpunk
-- **Banner ASCII animado** com arte cyberpunk futurística
-- **Cores neon** (ciano, verde, amarelo, magenta, vermelho)
-- **Animações de carregamento** com caracteres especiais
-- **Menus estilizados** com bordas ASCII
-- **Feedback visual** para todas as operações
 
 ### 🧠 Neural Forecasting Engine
 - **Modelos Neurais**: NHITS, N-BEATS, TFT com dados reais
@@ -54,6 +47,15 @@ O sistema agora suporta **dados reais** através de APIs gratuitas:
 - **Fallback Automático**: Dados simulados se APIs falharem
 - **Cache Inteligente**: 5 minutos para otimizar performance
 - **Indicadores Técnicos**: RSI, SMA, Bollinger Bands reais
+
+## ✨ Características
+
+### 🎨 Interface Cyberpunk
+- **Banner ASCII animado** com arte cyberpunk futurística
+- **Cores neon** (ciano, verde, amarelo, magenta, vermelho)
+- **Animações de carregamento** com caracteres especiais
+- **Menus estilizados** com bordas ASCII
+- **Feedback visual** para todas as operações
 
 ## 🛠️ Instalação
 

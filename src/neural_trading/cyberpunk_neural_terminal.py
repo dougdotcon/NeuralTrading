@@ -32,9 +32,10 @@ class NeuralTradingTerminal:
 
         # Configuração de dados
         self.use_real_data = True  # Por padrão usa dados reais
+        self.use_ai = os.getenv('OPENROUTER_API_KEY') is not None  # Ativa IA se API key disponível
 
         # Inicializar componentes
-        self.forecaster = NeuralForecaster(use_real_data=self.use_real_data)
+        self.forecaster = NeuralForecaster(use_real_data=self.use_real_data, use_ai=self.use_ai)
         self.multi_forecaster = MultiModelForecaster(use_real_data=self.use_real_data)
         self.strategy_manager = StrategyManager()
         self.portfolio_manager = PortfolioManager()
@@ -242,6 +243,27 @@ class NeuralTradingTerminal:
         print(f"  {Fore.GREEN}►{Style.RESET_ALL} MAPE: {metrics['mape']:.2f}%")
         print(f"  {Fore.GREEN}►{Style.RESET_ALL} Tempo de Inferência: {metrics['inference_time_ms']:.1f}ms")
 
+        # Insights da IA se disponível
+        if prediction.get('ai_enhanced', False) and 'ai_insights' in prediction:
+            insights = prediction['ai_insights']
+            print(f"\n{Fore.MAGENTA}📈 INSIGHTS DA IA:{Style.RESET_ALL}")
+            print(f"  {Fore.GREEN}►{Style.RESET_ALL} Tendência: {insights.get('trend', 'N/A').upper()}")
+            print(f"  {Fore.GREEN}►{Style.RESET_ALL} Força do Sinal: {insights.get('signal_strength', 'N/A')}")
+            if 'key_levels' in insights:
+                levels = insights['key_levels']
+                if 'support' in levels:
+                    print(f"  {Fore.GREEN}►{Style.RESET_ALL} Suporte: {format_currency(levels['support'])}")
+                if 'resistance' in levels:
+                    print(f"  {Fore.GREEN}►{Style.RESET_ALL} Resistência: {format_currency(levels['resistance'])}")
+            if 'risk_assessment' in insights:
+                risk = insights['risk_assessment']
+                risk_color = Fore.GREEN if risk == 'baixo' else Fore.YELLOW if risk == 'médio' else Fore.RED
+                print(f"  {Fore.GREEN}►{Style.RESET_ALL} Risco: {risk_color}{risk.upper()}{Style.RESET_ALL}")
+            if insights.get('reasoning'):
+                reasoning = insights['reasoning'][:200] + '...' if len(insights['reasoning']) > 200 else insights['reasoning']
+                print(f"\n{Fore.MAGENTA}💭 Raciocínio da IA:{Style.RESET_ALL}")
+                print(f"  {reasoning}")
+        
         # Sinal de trading
         signal = self.forecaster.get_signal_strength(prediction)
         signal_color = Fore.GREEN if signal['direction'] == 'Bullish' else Fore.RED
